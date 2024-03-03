@@ -1,5 +1,9 @@
 import React, { ReactNode } from 'react';
-import { usePrimaryColor } from '../store/ColorPaletteStore';
+import {
+  useAccentColor,
+  usePrimaryColor,
+  useSecondaryColor,
+} from '../store/ColorPaletteStore';
 import { GiPlainCircle } from 'react-icons/gi';
 
 type ColorProps = {
@@ -8,78 +12,56 @@ type ColorProps = {
 };
 
 function Color({ type, children }: ColorProps) {
-  /*  const { secondaryColor, setSecondaryColor } = useSecondaryColor();
-  const { accentColor, setAccentColor } = useAccentColor(); */
+  const { secondaryColor, setSecondaryColor } = useSecondaryColor();
+  const { accentColor, setAccentColor } = useAccentColor();
   const { primaryColor, setPrimaryColor } = usePrimaryColor();
 
-  /*   if (type === 'secondary')
-    return (
-      <div className="flex w-1/3 flex-col items-center justify-center gap-2">
-        <span style={{ color: `#${secondaryColor}` }}>{children}</span>
-        <GiPlainCircle
-          style={{ color: `#${secondaryColor}` }}
-          className="text-2xl"
-        />
-        <div className="flex items-center gap-3">
-          <span style={{ color: `#${secondaryColor}` }}>#</span>
-
-          <input
-            className="w-2/3 px-2"
-            placeholder="#..."
-            value={secondaryColor}
-            type="text"
-            style={{ border: `1px solid #${secondaryColor}` }}
-            onChange={(e) => setSecondaryColor(e.target.value)}
-          />
-        </div>
-      </div>
-    );
-
-  if (type === 'accent')
-    return (
-      <div className="flex w-1/3 flex-col items-center justify-center gap-2">
-        <span style={{ color: `#${secondaryColor}` }}>{children}</span>
-        <GiPlainCircle
-          style={{ color: `#${accentColor}` }}
-          className="text-2xl"
-        />
-        <div className="flex items-center gap-3">
-          <span style={{ color: `#${secondaryColor}` }}>#</span>
-
-          <input
-            className="w-2/3 px-2"
-            placeholder="#..."
-            value={accentColor}
-            type="text"
-            style={{ border: `1px solid #${secondaryColor}` }}
-            onChange={(e) => setAccentColor(e.target.value)}
-          />
-        </div>
-      </div>
-    ); */
-
-  if (type === 'primary')
-    return (
-      <div className="flex w-1/3 flex-col items-center justify-center gap-2">
-        <span style={{ color: `#${primaryColor}` }}>{children}</span>
-        <GiPlainCircle
-          style={{ color: `#${primaryColor}` }}
-          className="text-2xl"
-        />
-        <div className="flex items-center gap-3">
-          <span style={{ color: `#${primaryColor}` }}>#</span>
-
-          <input
-            className="w-2/3 px-2"
-            placeholder="#..."
-            value={primaryColor}
-            type="text"
-            style={{ border: `1px solid #${primaryColor}` }}
-            onChange={(e) => setPrimaryColor(e.target.value)}
-          />
-        </div>
-      </div>
-    );
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    if (type === 'primary') {
+      setPrimaryColor(e.target.value);
+    }
+    if (type === 'secondary') {
+      setSecondaryColor(e.target.value);
+    }
+    if (type === 'accent') {
+      setAccentColor(e.target.value);
+    }
+  }
+  return (
+    <div className="flex w-1/3 flex-col items-center justify-center gap-2">
+      <span style={{ color: secondaryColor }}>{children}</span>
+      <GiPlainCircle
+        style={{
+          color:
+            type === 'primary'
+              ? primaryColor
+              : type === 'secondary'
+                ? secondaryColor
+                : accentColor,
+        }}
+        className="text-2xl"
+      />
+      <input
+        className="w-2/3 px-1"
+        placeholder="#..."
+        value={
+          type === 'primary'
+            ? primaryColor
+            : type === 'secondary'
+              ? secondaryColor
+              : accentColor
+        }
+        type="text"
+        style={{
+          border: `1px solid ${accentColor}`,
+          color: primaryColor,
+          backgroundColor: secondaryColor,
+          outline: 'none',
+        }}
+        onChange={handleChange}
+      />
+    </div>
+  );
 }
 
 export default Color;
